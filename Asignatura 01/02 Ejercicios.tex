@@ -1,0 +1,143 @@
+\documentclass[11pt]{article}
+% -- Formato
+\input{formato}
+
+% -- Paquetes adicionales
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{aleph-comandos}
+\usepackage{enumitem}
+
+% -- Comandos extra
+
+
+% -- Datos
+\title{Deber de la semana 1}
+\author{Nombres y apellidos}
+\affil{Carrera de Ciencia de Datos}
+\date{\today}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Ejercicios de matrices}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Matriz inversa
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{ejer}
+    Considere la siguiente matriz de $3\times 3$:
+    \[
+        A = \begin{pmatrix}
+            1 & 2 & 3 \\
+            3 &-2 & 1 \\
+            4 & 1 & 1
+        \end{pmatrix}.
+    \]
+    \begin{enumerate}[leftmargin=*,label=\textit{\alph*})]
+        \item
+            Calcule el determinante de $A$ (puede utilizar directamente Python). ¿Por qué la matriz tiene inversa? 
+        \item
+            Utilizando el método de Gauss-Jordan, calcule la matriz inversa de $A$, indicando cada paso (puede utilizar directamente Python para las operaciones por filas).
+    \end{enumerate}
+\end{ejer}
+
+\begin{proof}\hspace{0pt}
+    \begin{enumerate}[leftmargin=*,label=\textit{\alph*})]
+    \item El determinante de $A$ está dado por 
+    \begin{align*}
+        det(A) & =\begin{vmatrix}
+            1 & 2 & 3 \\
+            3 &-2 & 1 \\
+            4 & 1 & 1
+        \end{vmatrix} \\
+        & = 1 \begin{vmatrix}
+                -2 & 1 \\
+                1 & 1
+                \end{vmatrix}-2\begin{vmatrix}
+                3 & 1 \\
+                4 & 1
+                \end{vmatrix} + 3 \begin{vmatrix}
+                    3 & -2 \\
+                    4 & 1
+                \end{vmatrix}\\
+        & = -3 + 2 + 33 = 32
+    \end{align*}
+    Por lo tanto, $A$ es invertible pues $\det(A)\neq 0$.
+    \item
+    Puesto que $A$ es invertible, se tiene que 
+    \[
+        (A|I_3)\sim (I_3|A^{-1}).
+    \]
+    Por lo tanto, aplicando operaciones por filas
+    \begin{align*}
+        \begin{pmatrix}
+            1 & 2 & 3 & | & 1 & 0 & 0\\[0.75em]
+            3 & -2 & 1 & | & 0 & 1 & 0\\[0.75em]
+            4 & 1 & 1 & | & 0 & 0 & 1
+        \end{pmatrix}& \sim \begin{pmatrix}
+            1 & 2 & 3 & | & 1 & 0 & 0\\[0.75em]
+            0 & -8 & -8 & | & -3 & 1 & 0\\[0.75em]
+            4 & 1 & 1 & | & 0 & 0 & 1
+        \end{pmatrix} && F_2 - 3F_1 \rightarrow F_2,  \\[0.25em]
+            &\sim \begin{pmatrix}
+            1 & 2 & 3 & | & 1 & 0 & 0\\[0.75em]
+            0 & -8 & -8 & | & -3 & 1 & 0\\[0.75em]
+            0 & -7 & -11 & | & -4 & 0 & 1
+        \end{pmatrix} && F_3 - 4F_1 \rightarrow F_3, \\[0.25em]
+            & \sim \begin{pmatrix}
+            1 & 2 & 3 & | & 1 & 0 & 0\\[0.75em]
+            0 & 1 & 1 & | & \dfrac{3}{8} & -\dfrac{1}{8} & 0\\[0.75em]
+            0 & -7 & -11 & | & -4 & 0 & 1
+        \end{pmatrix} && -\dfrac{1}{8}F_2 \rightarrow F_2, \\[0.25em]
+            & \sim \begin{pmatrix}
+            1 & 2 & 3 & | & 1 & 0 & 0\\[0.75em]
+            0 & 1 & 1 & | & \dfrac{3}{8} & -\dfrac{1}{8} & 0\\[0.75em]
+            0 & 7 & 11 & | & 4 & 0 & -1
+        \end{pmatrix} && -F_3 \rightarrow F_3 \\[0.75em]
+            & \sim \begin{pmatrix}
+            1 & 0 & 1 & | & \dfrac{1}{4} & \dfrac{1}{4} & 0\\[0.75em]
+            0 & 1 & 1 & | & \dfrac{3}{8} & -\dfrac{1}{8} & 0\\[0.75em]
+            0 & 7 & 11 & | & 4 & 0 & -1
+        \end{pmatrix} && F_1 - 2 F_2 \rightarrow F_1 \\[0.75em]
+            & \sim \begin{pmatrix}
+            1 & 0 & 1 & | & \dfrac{1}{4} & \dfrac{1}{4} & 0\\[0.75em]
+            0 & 1 & 1 & | & \dfrac{3}{8} & -\dfrac{1}{8} & 0\\[0.75em]
+            0 & 0 & 4 & | & \dfrac{11}{8} & \dfrac{7}{8} & -1
+        \end{pmatrix} && F_3 - 7 F_2 \rightarrow F_3 \\[0.75em]
+            & \sim \begin{pmatrix}
+            1 & 0 & 1 & | & \dfrac{1}{4} & \dfrac{1}{4} & 0\\[0.75em]
+            0 & 1 & 1 & | & \dfrac{3}{8} & -\dfrac{1}{8} & 0\\[0.75em]
+            0 & 0 & 1 & | & \dfrac{11}{32} & \dfrac{7}{32} & -\dfrac{1}{4}
+        \end{pmatrix} && \dfrac{1}{4}F_3 \rightarrow F_3 \\[0.75em]
+            & \sim \begin{pmatrix}
+            1 & 0 & 1 & | & \dfrac{1}{4} & \dfrac{1}{4} & 0\\[0.75em]
+            0 & 1 & 0 & | & \dfrac{1}{32} & -\dfrac{11}{32} & \dfrac{1}{4}\\[0.75em]
+            0 & 0 & 1 & | & \dfrac{11}{32} & \dfrac{7}{32} & -\dfrac{1}{4}
+        \end{pmatrix} && F_2-F_3 \rightarrow F_2 \\[0.75em]
+            & \sim \begin{pmatrix}
+            1 & 0 & 0 & | & -\dfrac{3}{32} & \dfrac{1}{32} & \dfrac{1}{4}\\[0.75em]
+            0 & 1 & 0 & | & \dfrac{1}{32} & -\dfrac{11}{32} & \dfrac{1}{4}\\[0.75em]
+            0 & 0 & 1 & | & \dfrac{11}{32} & \dfrac{7}{32} & -\dfrac{1}{4}
+        \end{pmatrix} && F_1-F_3 \rightarrow F_1.
+        \end{align*}
+    Por lo tanto, la matriz inversa de la matriz $A$ está dada por
+    \[
+        A^{-1} = \begin{pmatrix}
+             -\dfrac{3}{32} & \dfrac{1}{32} & \dfrac{1}{4}\\[0.75em]
+             \dfrac{1}{32} & -\dfrac{11}{32} & \dfrac{1}{4}\\[0.75em]
+             \dfrac{11}{32} & \dfrac{7}{32} & -\dfrac{1}{4}
+        \end{pmatrix}. \qedhere
+    \]
+\end{enumerate}
+\end{proof}    
+
+
+\end{document}
+

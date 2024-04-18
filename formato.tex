@@ -1,0 +1,132 @@
+% -- Formato realizado en febrero de 2024
+% -- Corre sin problema en TeX Live 2023
+% -- Adapta correctamente normas APA con BibLaTeX
+
+% -- Paquetes básicos
+\usepackage[spanish,es-nolists]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[noblocks]{authblk} % Para poner afiliación
+    \renewcommand\Authsep{; }
+    \renewcommand\Authand{; }
+    \renewcommand\Authands{; }
+    \renewcommand\Affilfont{\small}
+    \setcounter{Maxaffil}{1}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage[colorlinks,allcolors=.]{hyperref}
+\usepackage[a4paper, hmargin=2cm, vmargin=4cm]{geometry}
+\usepackage{iftex}
+\usepackage{silence}
+
+% -- Formato de título
+\usepackage{titling}
+\pretitle{\vspace*{-2cm}\begin{center}\bfseries\LARGE}
+\posttitle{\end{center}}
+
+% -- Tipo de letra
+\ifPDFTeX % LaTeX y pdfLaTeX
+    \RequirePackage[defaultfam,tabular,lining]{montserrat}
+        \renewcommand*\oldstylenums[1]{{\fontfamily{Montserrat-TOsF}\selectfont #1}}
+    \RequirePackage[OT1]{eulervm}
+    \renewcommand{\labelitemi}{$\bullet$}
+    \DeclareMathSizes{10}{10.78}{7}{7}
+\else % XeLaTeX
+    \RequirePackage[OT1]{eulervm}
+    \RequirePackage{fontspec}
+    \setmainfont{montserrat}
+    \DeclareSymbolFont{operators}{\encodingdefault}{\familydefault}{m}{n}
+    \DeclareMathSizes{10}{10.78}{7}{7}
+    \renewcommand{\labelitemi}{$\bullet$}
+\fi
+\WarningFilter{latexfont}{Font shape  `T1/cmtt/regular/n'}
+\WarningFilter{latexfont}{Some font shapes were not available, defaults substituted.}
+
+% -- Fondo
+\WarningsOff[everypage]
+\usepackage[pages=all]{background}
+\backgroundsetup{
+    scale=1,color=black,opacity=1,angle=0,
+    hshift=0mm,
+    vshift=0mm,
+    contents={\includegraphics[width=210mm]{HojaMembretada.pdf}}
+}
+
+% -- Formato de bibliografía
+\usepackage{csquotes}
+\usepackage[backend=biber, style=apa]{biblatex}
+% -- Adaptar apa al español (2023)
+    \makeatletter
+    \DefineBibliographyExtras{spanish}{ 
+        % Código para corregir &
+        \setcounter{smartand}{1}
+    	\let\lbx@finalnamedelim=\lbx@es@smartand
+    	\let\lbx@finallistdelim=\lbx@es@smartand
+        % Código para corregir coma final
+        \renewcommand*{\apablx@ifrevnameappcomma}[2]{#2}
+        \let\finalandcomma=\empty
+    }
+    \makeatother
+    \setlength{\bibhang}{\parindent}
+% -- Fin de adaptar apa al español (2023)
+
+% -- Formato leyendas
+\usepackage[font={small},labelfont={bf,small},
+    justification=centerlast,tablename=Tabla]{caption}
+\usepackage{listings}
+    \renewcommand{\lstlistingname}{Código}
+
+% -- Formato Código
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{gray!20},   
+    commentstyle=\color{teal},
+    keywordstyle=\color{purple},
+    stringstyle=\color{violet},
+    basicstyle=\ttfamily\footnotesize,
+    breaklines=true,                 
+    captionpos=b,                    
+    showstringspaces=false,
+    linewidth=0.95\linewidth,
+    literate={\ \ }{{\ }}1,
+    xleftmargin=0.05\linewidth,
+}
+\lstset{style=mystyle}
+
+% -- Espacio
+\setlength{\parskip}{0.4\baselineskip}
+\renewcommand{\baselinestretch}{1.2}
+
+
+\usepackage[many]{tcolorbox}
+\usepackage{amsthm}
+\definecolor{colordef}{cmyk}{0.81,0.62,0.00,0.22}
+\newtheoremstyle{estiloteorema}%
+    {9pt}{9pt}{}{0pt}
+    {\bfseries\color{\tcb@@color}}
+    {}{ }
+    {\textsc{\thmname{#1}\thmnumber{ #2}}\thmnote{: #3}.}
+\makeatletter
+%%  Keys temporales: |tipo|,|color|, |contador| e |icóno|.
+\def\tcb@@tipo{}
+    \tcbset{ tipo/.code = {\def\tcb@@tipo{#1} } }
+\def\tcb@@contador{}
+    \tcbset{ contador/.code = {\def\tcb@@contador{#1} } }
+\def\tcb@@color{colordef}
+    \tcbset{ color/.code = {\def\tcb@@color{#1} } }
+\def\tcb@@icono{{\large\faWarning}}
+    \tcbset{ icono/.code = {\def\tcb@@icono{#1} } }
+\tcbset{ recuadrost/.style ={
+    before skip=10pt,arc=0mm,breakable,enhanced,
+    colback=\tcb@@color!7,colframe=\tcb@@color,
+    boxrule=0pt,leftrule=2pt,
+    top=0.5mm,bottom=0.5mm,left=2mm,right=2mm,
+    fontupper=\normalsize,
+    % parbox=false
+    }
+    }
+\makeatother
+\newtheorem{ejer}{Ejercicio}
+    \tcolorboxenvironment{ejer}{%
+        color=colordef,recuadrost,colback=colordef!7,drop fuzzy shadow
+    }
